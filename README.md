@@ -3,7 +3,6 @@
 > A task assistant built with n8n that captures tasks from emails and provides a chatbot with a prioritised to-do list via Telegram.
 
 ![Demo GIF](assets/demo.gif)
-*A brief demo showing the agent creating a task from an email and responding to a query in Telegram.*
 
 ---
 
@@ -11,7 +10,7 @@
 
 The system has two core functions:
 1.  **Automated Email Parser:** It actively monitors my Gmail, uses an LLM (Gemini flash 2.5) to identify actionable tasks, and automatically adds them to my central task list in Google Sheets.
-2.  **Interactive Telegram Bot:** It provides a conversational interface (powered by GPT-4o) for me to manage my tasks (CRUD). Importantly, it provides the todo list in sorted priority based on a formula that weighs both importance and urgency.
+2.  **Interactive Telegram Bot:** It provides a conversation interface (powered by GPT-4o) for me to manage my tasks (supports CRUD). Importantly, it provides the todo list in sorted priority based on a formula that weighs both importance and urgency.
 
 ![Diagram](assets/architecture.png)
 
