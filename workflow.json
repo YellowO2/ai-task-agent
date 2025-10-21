@@ -1,0 +1,897 @@
+{
+  "name": "ai task agent",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1312,
+        112
+      ],
+      "id": "7ebac830-d775-47af-a56c-9ff428f385d0",
+      "name": "Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "7UFAwqVE74caA3eM",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('User Profile').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1184,
+        112
+      ],
+      "id": "5341bef1-5ba0-4898-85c2-ca8741210079",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo",
+          "mode": "list",
+          "cachedResultName": "My potato stack",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 25954392,
+          "mode": "list",
+          "cachedResultName": "Priority_View",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit#gid=25954392"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1056,
+        112
+      ],
+      "id": "a1792c3e-4248-49e2-b4c2-db58c4eb1b59",
+      "name": "Get tasks",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Hsvx90h0EEK34fJ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo",
+          "mode": "list",
+          "cachedResultName": "My potato stack",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tasks_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task": "={{ $fromAI('Task', ``, 'string') }}",
+            "Description": "={{ $fromAI('Description', ``, 'string') }}",
+            "Deadline": "={{ $fromAI('Deadline', ``, 'string') }}",
+            "Importance": "={{ $fromAI('Importance', ``, 'number') }}",
+            "Work Total": "={{ $fromAI('Work_Total', ``, 'number') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task",
+              "displayName": "Task",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Importance",
+              "displayName": "Importance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Done",
+              "displayName": "Work Done",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Work Total",
+              "displayName": "Work Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Priority Score",
+              "displayName": "Priority Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -928,
+        112
+      ],
+      "id": "1ebd8dd5-13e0-4f57-bb37-a3a5d8cf4e80",
+      "name": "Create task",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Hsvx90h0EEK34fJ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo",
+          "mode": "list",
+          "cachedResultName": "My potato stack",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tasks_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task": "={{ $fromAI('Task', ``, 'string') }}",
+            "Description": "={{ $fromAI('Description', ``, 'string') }}",
+            "Deadline": "={{ $fromAI('Deadline', ``, 'string') }}",
+            "row_number": "={{ $fromAI('row_number__using_to_match_', ``, 'number') }}",
+            "Importance": "={{ $fromAI('Importance', ``, 'number') }}",
+            "Work Done": "={{ $fromAI('Work_Done', ``, 'number') }}",
+            "Work Total": "={{ $fromAI('Work_Total', ``, 'number') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Task",
+              "displayName": "Task",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Importance",
+              "displayName": "Importance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Done",
+              "displayName": "Work Done",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Total",
+              "displayName": "Work Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Priority Score",
+              "displayName": "Priority Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -800,
+        112
+      ],
+      "id": "a118d819-41ef-4323-a4d1-d83d70e41ec5",
+      "name": "Update task",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Hsvx90h0EEK34fJ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo",
+          "mode": "list",
+          "cachedResultName": "My potato stack",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tasks_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit#gid=0"
+        },
+        "startIndex": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start_Row_Number', ``, 'number') }}",
+        "numberToDelete": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Number_of_Rows_to_Delete', ``, 'number') }}"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -672,
+        112
+      ],
+      "id": "c15d7d0f-d24c-4e5a-aa3f-a23abf2f6853",
+      "name": "Delete task",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Hsvx90h0EEK34fJ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please Parse the following user message:\n\nusername: {{ $json.message.from.username }}\nMessage content:\n{{ $json.message.text }}\nUser Profile:\n{{ $json.profile }}\n",
+        "options": {
+          "systemMessage": "=# Task Management Agent System Prompt\n\nYou are a helpful task manager that helps users organise and prioritise their tasks tracked using a Google Sheets database. You can create, view, update, and delete tasks in the google sheet while maintaining data consistency. TLDR, a personal assistant for the user to manage their day. The Get tasks tool returns a list of all current tasks, pre-sorted by priority. The most important task is always the first item in the list.\n\n## Task Data Structure\n- Task: Task name (required).\n- Description: Descriptions and useful details about the task.\n- Deadline: Optional due date in YYYY-MM-DD format.\n- Importance(number): A rating from 1 (most critical) to 10 (trivial).\n- Work Total(number): The total estimated work units for the task (e.g., Pomodoros).\n\nNote: Google Sheets automatically provides a row_number field for tracking - you don't need to manage IDs manually.\n\n\n## Response Style\n- Be helpful and efficient\n- Always confirm actions taken\n- Ask clarifying questions when needed\n- Use friendly, professional language\n- Show task details when relevant\n\n## Presentation Rules\n- When showing a list of tasks, make it a simple, human-readable summary. Don't need to show the \"importance\" or fields that are not relevant.\n\n## Error Handling\n- If a task can't be found, offer to show all tasks\n- If required information is missing, ask specific questions\n- Provide helpful suggestions when commands are unclear\n\nRemember: Always prioritize data accuracy and user confirmation, especially for destructive actions like deletion. Keep the task list organized and up-to-date."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1064,
+        -112
+      ],
+      "id": "e923a630-08b1-4e4d-a99c-23704085eaab",
+      "name": "Task management agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1016,
+        648
+      ],
+      "id": "90885ae1-4b5b-4589-98de-c031f35fa07e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wMPkB6fNjaJPTY82",
+          "name": "potato-stack-key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const profileFacts = [\n  \"I am a year 3 Computer Engineering Student at NTU.\",\n  \"I have internship next sememster and I have not secure a satified internship.\",\n  \"I want to maintain a GPA above 4.\",\n  \"I like to focus on whats actually important, sort of like the 80/20 rule.\"\n];\n\n// Get the incoming data (from the chat trigger)\nconst items = $input.all();\n\nconst profileString = profileFacts.map(fact => `- ${fact}`).join('\\n');\n// Add your profile facts to the data\nfor (const item of items) {\n  item.json.profile = profileString;\n}\n\n// Pass everything along to the next node\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1536,
+        -112
+      ],
+      "id": "8ee5fed0-0394-4233-93ba-445550595a54",
+      "name": "User Profile"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1760,
+        424
+      ],
+      "id": "5201b5ef-fda6-4809-bb30-d141331cf5b6",
+      "name": "1. New email trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j4izCirx5zvf6IEL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}",
+        "simple": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1536,
+        424
+      ],
+      "id": "9d1e48fd-8c9f-4411-8361-156628f67da2",
+      "name": "2. Fetch full email via ID",
+      "webhookId": "0beafe14-4f29-4977-82d6-63b2f93ee8da",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "j4izCirx5zvf6IEL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const profileFacts = [\n  \"I am a year 3 Computer Engineering Student at NTU.\",\n  \"I have internship next semester and have not secured a satisfactory internship.\",\n  \"I want to maintain a GPA above 4.\",\n  \"I like to focus on what's actually important, like the 80/20 rule.\",\n  \"I feel NTU has quite some spam emails and many are useless. Important ones are like school assignments and important notifications.\"\n];\n\n// get the incoming email data\nconst email = $input.first().json;\n\n// combine into one n8n item\nconst item = {\n  json: {\n    from: $input.first().json.from,\n    to: $input.first().json.to,\n    date: email.date,\n    subject: email.subject,\n    text: email.text,\n    profile: profileFacts\n  }\n};\n\n// return as array of one item\nreturn [item];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1312,
+        424
+      ],
+      "id": "54a4d238-2923-4e0c-8aca-149a62b534bf",
+      "name": "3. Prepare Data for LLM"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an email-to-task agent. Your goal is to analyze a piece of text (like an email) and determine if it contains useful information that should be turned into tasks or reminders for the user. Use common sense and consider the user’s profile. Even a reminder like “finish up this week’s tutorial” or “check new information released on the school website” should be turned into a task if they are likely important. It is better to create a task rather than potentially missing important tasks and reminders for the user. \nReturn a JSON array of create tasks:\n  {\"create_task\":{\"Task\":\"...\", \"Description\":\"...\", \"Deadline\":\"YYYY-MM-DD\", \"Importance\":1-10, \"Work Total\":1}}\n\nIf no useful information or actionable tasks, just output {}\n\nTask Data Structure:\n- Task: Task name (required).\n- Description: Descriptions and useful details about the task.\n- Deadline: Optional due date in YYYY-MM-DD format.\n- Importance(number): A rating from 1 (most critical) to 10 (trivial).\n- Work Total(number): The total estimated work units for the task (e.g., Pomodoros).\n\n\nRules:\n- Dates: YYYY-MM-DD (Singapore time for relative dates). Never invent a date; leave empty if none.\n- Numbers: numeric (not strings). Defaults: Importance=5, Work_Total=1.\n- Ignore noises like spam/ads/legal footers etc.\n- If the email contains multiple clear action items, you can create multiple tasks, however they should not be repeated.\n- Do not re-attempt after a successful tool call.\n\nTool to use:\n- create_task({ Task, Description?, Deadline?, Importance?, Work_Total? })\n\nUser Profile:\n{{ $json.profile }}\n\nNow, please parse the following info in consideration:\nSubject\t{{ $json.subject }}\nDate\t{{ $json.date }}\nContent\t{{ $json.text }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -1088,
+        424
+      ],
+      "id": "0333c419-43b2-4e3a-b1ea-187610c029f3",
+      "name": "4. LLM Email Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the text from the LLM output\nconst llmText = $input.item.json.text;\n\n// Remove the markdown fences and trim whitespace\nconst jsonString = llmText.replace(/```json\\n|```/g, '').trim();\n\n// Parse the cleaned string into actual JSON\nreturn JSON.parse(jsonString);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        424
+      ],
+      "id": "b7fb3f90-09ef-4177-98b3-eb471f2d93fb",
+      "name": "5. Clean LLM Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input is the array from the previous node\nconst tasks = $input.all();\n\n// Filter for valid tasks and map to a cleaner format\nconst processedTasks = tasks\n  .map(item => item.json.create_task) // Unwrap first to make it easier to read\n  .filter(task => {\n    // Now validate the unwrapped task object\n    if (!task || !task.Task) return false; // Must have a task object and a title\n    \n    const isImportanceValid = task.Importance >= 1 && task.Importance <= 10;\n    const isWorkTotalValid = task[\"Work Total\"] >= 1;\n\n    return isImportanceValid && isWorkTotalValid;\n  });\n\n// Return the clean, validated list of task objects\nreturn processedTasks;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -512,
+        424
+      ],
+      "id": "dc2e9b3e-0656-4c8f-90f3-966c2c9958eb",
+      "name": "6. Validate LLM Output"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo",
+          "mode": "list",
+          "cachedResultName": "My potato stack",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tasks_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LjsySl55kdwfnV7oMAz2V8TBBz_XYKaEgRHa9o5d1fo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task": "={{ $json.Task }}",
+            "Description": "={{ $json.Description }}",
+            "Deadline": "={{ $json.Deadline }}",
+            "Importance": "={{ $json.Importance }}",
+            "Work Total": "={{ $json[\"Work Total\"] }}",
+            "Work Done": "0"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task",
+              "displayName": "Task",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Importance",
+              "displayName": "Importance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Work Done",
+              "displayName": "Work Done",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Work Total",
+              "displayName": "Work Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority Score",
+              "displayName": "Priority Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -288,
+        424
+      ],
+      "id": "b1693453-59d7-4625-88fe-75bfcc8fe646",
+      "name": "7. Create Task in Google Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Hsvx90h0EEK34fJ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1760,
+        -112
+      ],
+      "id": "622b05d3-a07a-4df3-8aaa-b65d4a8fd4c8",
+      "name": "Telegram Trigger",
+      "webhookId": "dfb44171-6fa7-405b-ba3a-e93357f1bcb5",
+      "credentials": {
+        "telegramApi": {
+          "id": "80ZxrRZsBdUiEHmG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('User Profile').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        -112
+      ],
+      "id": "f35cf51e-7ed6-45d5-8155-13479329bde3",
+      "name": "Send a text message",
+      "webhookId": "e23a1185-57c2-439c-a139-86f8b920a1a9",
+      "credentials": {
+        "telegramApi": {
+          "id": "80ZxrRZsBdUiEHmG",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "4. LLM Email Parser": [
+      {
+        "json": {
+          "text": "```json\n[\n  {\"create_task\": {\n    \"Task\": \"Prepare for SOTETSU GRAND FRESA TAKADANOBABA Check-in\",\n    \"Description\": \"Remember to present a photo ID matching guest name and your check-in number (587609735 or 8251012000669735) upon arrival on Monday, 5 January 2026. Keep PIN (043085) confidential.\",\n    \"Deadline\": \"2026-01-05\",\n    \"Importance\": 3,\n    \"Work Total\": 1\n  }},\n  {\"create_task\": {\n    \"Task\": \"Review SOTETSU GRAND FRESA TAKADANOBABA Cancellation Policy\",\n    \"Description\": \"Free cancellation until 23:59 on 25 December 2025 (JST). From 26 December 2025, cancellation costs S$ 106.\",\n    \"Deadline\": \"2025-12-25\",\n    \"Importance\": 2,\n    \"Work Total\": 1\n  }},\n  {\"create_task\": {\n    \"Task\": \"Download SOTETSU GRAND FRESA TAKADANOBABA Payment Confirmation\",\n    \"Description\": \"Download the payment confirmation PDF for Booking.com confirmation 17563209643512032305. Useful for records or reimbursement.\",\n    \"Deadline\": null,\n    \"Importance\": 6,\n    \"Work Total\": 1\n  }},\n  {\"create_task\": {\n    \"Task\": \"Request SOTETSU GRAND FRESA TAKADANOBABA Booking Invoice\",\n    \"Description\": \"Request an invoice for Booking.com confirmation 17563209643512032305 after checking out on 6 January 2026. Note it takes ~30 days for the partner provider to issue.\",\n    \"Deadline\": null,\n    \"Importance\": 7,\n    \"Work Total\": 1\n  }}\n]\n```"
+        }
+      }
+    ],
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 514188806,
+          "message": {
+            "message_id": 2,
+            "from": {
+              "id": 5992887498,
+              "is_bot": false,
+              "first_name": "Yo____oX",
+              "username": "yx_1234",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 5992887498,
+              "first_name": "Yo____oX",
+              "username": "yx_1234",
+              "type": "private"
+            },
+            "date": 1760860414,
+            "text": "hello"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create task": {
+      "ai_tool": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update task": {
+      "ai_tool": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete task": {
+      "ai_tool": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "4. LLM Email Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Profile": {
+      "main": [
+        [
+          {
+            "node": "Task management agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. New email trigger": {
+      "main": [
+        [
+          {
+            "node": "2. Fetch full email via ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Fetch full email via ID": {
+      "main": [
+        [
+          {
+            "node": "3. Prepare Data for LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Prepare Data for LLM": {
+      "main": [
+        [
+          {
+            "node": "4. LLM Email Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. LLM Email Parser": {
+      "main": [
+        [
+          {
+            "node": "5. Clean LLM Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Clean LLM Output": {
+      "main": [
+        [
+          {
+            "node": "6. Validate LLM Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Validate LLM Output": {
+      "main": [
+        [
+          {
+            "node": "7. Create Task in Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "User Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Task management agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4a99dac9-c361-4d3d-bfc3-fc75d216c5f8",
+  "meta": {
+    "templateId": "task_management_agent_with_google_sheets",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "884c37507d1132963232e96ebf1fd59436738e565db8e78f9373f0107de065db"
+  },
+  "id": "tGBjhlYmFMtLtSOV",
+  "tags": []
+}
